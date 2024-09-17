@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render
 
 posts = [
@@ -46,17 +47,16 @@ posts = [
 
 def index(request):
     """Main page for blog. Views all blog posts."""
-    context = {'posts': posts[::-1]}
-    return render(request, 'blog/index.html', context=context)
+    return render(request, 'blog/index.html', context={'posts': posts[::-1]})
 
 
-def post(request, id):
+def post(request, post_id):
     """View post details."""
-    context = {'post': posts[id]}
-    return render(request, 'blog/detail.html', context=context)
+    if not 0 <= post_id < len(posts):
+        raise Http404(f'Поста с id {post_id} не существует.')
+    return render(request, 'blog/detail.html', context={'post': posts[post_id]})
 
 
 def category(request, category_slug):
     """View posts in category."""
-    content = {'category': category_slug}
-    return render(request, 'blog/category.html', context=content)
+    return render(request, 'blog/category.html', context={'category': category_slug})
