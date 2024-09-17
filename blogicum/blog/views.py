@@ -54,9 +54,13 @@ def post(request, post_id):
     """View post details."""
     if not 0 <= post_id < len(posts):
         raise Http404(f'Поста с id {post_id} не существует.')
-    return render(request, 'blog/detail.html', context={'post': posts[post_id]})
+    return render(
+        request, 'blog/detail.html', context={'post': posts[post_id]}
+    )
 
 
 def category(request, category_slug):
     """View posts in category."""
-    return render(request, 'blog/category.html', context={'category': category_slug})
+    return render(
+        request, 'blog/category.html', context={'category': category_slug}
+    )
