@@ -44,6 +44,8 @@ posts = [
     },
 ]
 
+posts_dict = {post['id']: post for post in posts}
+
 
 def index(request):
     """Main page for blog. Views all blog posts."""
@@ -55,13 +57,10 @@ def post(request, post_id):
     View post details.
     If post is not exist, raise HttpError 404.
     """
-    post_obj = next(
-        (post_obj for post_obj in posts if post_obj.get('id') == post_id), None
-    )
-    if not post_obj:
+    if not posts_dict.get(post_id):
         raise Http404(f'Поста с id {post_id} не существует.')
     return render(
-        request, 'blog/detail.html', context={'post': post_obj}
+        request, 'blog/detail.html', context={'post': posts_dict.get(post_id)}
     )
 
 
