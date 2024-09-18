@@ -51,11 +51,17 @@ def index(request):
 
 
 def post(request, post_id):
-    """View post details."""
-    if not 0 <= post_id < len(posts):
+    """
+    View post details.
+    If post is not exist, raise HttpError 404.
+    """
+    post_obj = next(
+        (post_obj for post_obj in posts if post_obj.get('id') == post_id), None
+    )
+    if not post_obj:
         raise Http404(f'Поста с id {post_id} не существует.')
     return render(
-        request, 'blog/detail.html', context={'post': posts[post_id]}
+        request, 'blog/detail.html', context={'post': post_obj}
     )
 
 
